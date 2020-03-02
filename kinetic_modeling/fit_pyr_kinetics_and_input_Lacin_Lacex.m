@@ -66,7 +66,6 @@ params_default_ub = [Inf, Inf, Inf, ...
     1/10, 1/10, 1/10, 1/35 , ...
     Inf 60 Inf,10,10];
 
-
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
 end
@@ -409,6 +408,7 @@ params_all = {'kPL', 'kLinLex', 'kPA', ...
     'R1P', 'R1L', 'R1A', 'R1Lex', ...
     'Rinj', 'Tarrival', 'Tbolus','FP','FL'};
 
+
 nfit = 0;
 for n = 1:length(params_all)
     if isfield(params_fixed, params_all(n))
@@ -419,7 +419,7 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-FP-kPA, 0, 0, 0
+A = [-R1P-kPL-kPA, 0, 0, 0
     +kPL, -R1L-kLinLex, 0, 0
     0, +kLinLex, -R1Lex-FL, 0
     +kPA, 0, 0, -R1A];
@@ -445,7 +445,7 @@ for It=0:N-1
         
     else
         Mz_init = Mz_all(:,It) .* Mzscale(:, It);
-        u(It+1) = gampdf(t-Tarrival,Agam,Bgam)*-Rinj;
+        u(It+1) = gampdf(t-Tarrival,Agam,Bgam)*Rinj;
     end
     
         
