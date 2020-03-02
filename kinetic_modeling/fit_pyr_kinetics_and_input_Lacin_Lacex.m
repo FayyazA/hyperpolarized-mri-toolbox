@@ -10,8 +10,8 @@ function [params_fit, Sfit, ufit, error_metrics] = fit_pyr_kinetics_and_input_La
 %
 % [params_fit, Sfit, ufit, objective_val] = fit_pyr_kinetics_and_input(S, TR, flips, params_fixed, params_est, noise_level, plot_flag)
 %
-% All params_* values are structures, including possible fields of 'kPL', 'kPB', 'kPA', (1/s),
-% 'R1P', 'R1L', 'R1B', 'R1A' (1/s).
+% All params_* values are structures, including possible fields of 'kPL', 'kLinLex', 'kPA', (1/s),
+% 'R1P', 'R1L', 'R1Lex', 'R1A' (1/s).
 % INPUTS
 %	S - signal dynamics [voxels, # of metabolites, # of time points]
 %		Substrate (e.g. Pyruvate) should be the first metabolite, followed by each product
@@ -53,18 +53,18 @@ if isempty(Nx)
     Nx = 1;
 end
 
-params_all = {'kPL', 'kPB', 'kPA', ...
-    'R1P', 'R1L', 'R1A', 'R1B', ...
-    'Rinj', 'Tarrival', 'Tbolus'};
+params_all = {'kPL', 'kLinLex', 'kPA', ...
+    'R1P', 'R1L', 'R1A', 'R1Lex', ...
+    'Rinj', 'Tarrival', 'Tbolus','FP'};
 params_default_est = [0.01, 0.01, 0.01, ...
     1/30, 1/25, 1/25, 1/15, ...
-    0.1, 0, 8];
+    0.1, 0, 8,0.15];
 params_default_lb = [-Inf, -Inf, -Inf, ...
     1/50, 1/50, 1/50, 1/50, ...
-    0, -30, 0];
+    0, -30, 0,1E-08];
 params_default_ub = [Inf, Inf, Inf, ...
     1/10, 1/10, 1/10, 1/5 , ...
-    Inf 30 Inf];
+    Inf 30 Inf,10];
 
 
 if nargin < 5 || isempty(params_fixed)
@@ -80,11 +80,11 @@ products_string = {'pyruvate', 'lactate', 'bicarb', 'alanine'};
 switch Nmets
     case 2 % assume pyruvate & lactate
         params_fixed.kPA = 0;  params_fixed.S0_A = 0;  params_fixed.R1A = 1;
-        params_fixed.kPB = 0;  params_fixed.S0_B = 0;  params_fixed.R1B = 1;
+        params_fixed.kLinLex = 0;  params_fixed.S0_B = 0;  params_fixed.R1Lex = 1;
         products_string = {'pyruvate', 'lactate'};
-    case 3 % assume pyruvate & lactate & bicarbonate
+    case 3 % assume pyruvate, lacin, lacex
         params_fixed.kPA = 0;   params_fixed.S0_A = 0;  params_fixed.R1A = 1;
-        products_string = {'pyruvate', 'lactate_intra', 'lactate_extra'};
+        products_string = {'pyruvate', 'lactateintra', 'lactateextra'};
 end
 
 
@@ -327,8 +327,8 @@ Nmets = size(Mzscale,1); N = size(Mzscale,2);
 Mz_all = zeros(Nmets, N);
 u = zeros(1,N);
 
-params_all = {'kPL', 'kPB', 'kPA', ...
-    'R1P', 'R1L', 'R1A', 'R1B', ...
+params_all = {'kPL', 'kLinLex', 'kPA', ...
+    'R1P', 'R1L', 'R1A', 'R1Lex', ...
     'Rinj', 'Tarrival', 'Tbolus'};
 
 nfit = 0;
@@ -341,9 +341,9 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-kPB-kPA, 0, 0, 0
+A = [-R1P-kPL-kLinLex-kPA, 0, 0, 0
     +kPL, -R1L, 0, 0
-    +kPB, 0, -R1B, 0
+    +kLinLex, 0, -R1Lex, 0
     +kPA, 0, 0, -R1A];
 
 for It=0:N-1
@@ -405,9 +405,9 @@ Nmets = size(Mzscale,1); N = size(Mzscale,2);
 Mz_all = zeros(Nmets, N);
 u = zeros(1,N);
 
-params_all = {'kPL', 'kPB', 'kPA', ...
-    'R1P', 'R1L', 'R1A', 'R1B', ...
-    'Rinj', 'Tarrival', 'Tbolus'};
+params_all = {'kPL', 'kLinLex', 'kPA', ...
+    'R1P', 'R1L', 'R1A', 'R1Lex', ...
+    'Rinj', 'Tarrival', 'Tbolus','FP'};
 
 nfit = 0;
 for n = 1:length(params_all)
@@ -419,9 +419,9 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-kPB-kPA, 0, 0, 0
-    +kPL, -R1L, 0, 0
-    +kPB, 0, -R1B, 0
+A = [-R1P-kPL-FP-kPA, 0, 0, 0
+    +kPL, -R1L-kLinLex, 0, 0
+    0, +kLinLex, -R1Lex, 0
     +kPA, 0, 0, -R1A];
 
 % these parameters give a full-width half-max of the bolus of ~ Tbolus sec
