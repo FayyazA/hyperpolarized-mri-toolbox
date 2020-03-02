@@ -55,16 +55,16 @@ end
 
 params_all = {'kPL', 'kLinLex', 'kPA', ...
     'R1P', 'R1L', 'R1A', 'R1Lex', ...
-    'Rinj', 'Tarrival', 'Tbolus','FP','FL'};
+    'Rinj', 'Tarrival', 'Tbolus','FP'};
 params_default_est = [0.01, 0.01, 0.01, ...
     1/30, 1/22, 1/25, 1/15, ...
-    0.1, 0, 8,0.15,0.6];
+    0.1, 0, 8,0.15];
 params_default_lb = [-Inf, -Inf, -Inf, ...
     1/50, 1/38, 1/50, 1/40, ...
-    10^8, 30, 40,1E-08,1E-08];
+    10^8, 30, 40,1E-08];
 params_default_ub = [Inf, Inf, Inf, ...
     1/10, 1/10, 1/10, 1/35 , ...
-    Inf 60 Inf,10,10];
+    Inf 60 Inf,10];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -406,7 +406,7 @@ u = zeros(1,N);
 
 params_all = {'kPL', 'kLinLex', 'kPA', ...
     'R1P', 'R1L', 'R1A', 'R1Lex', ...
-    'Rinj', 'Tarrival', 'Tbolus','FP','FL'};
+    'Rinj', 'Tarrival', 'Tbolus','FP'};
 
 
 nfit = 0;
@@ -421,7 +421,7 @@ end
 
 A = [-R1P-kPL-kPA, 0, 0, 0
     +kPL, -R1L-kLinLex, 0, 0
-    0, +kLinLex, -R1Lex-FL, 0
+    0, +kLinLex, -R1Lex, 0
     +kPA, 0, 0, -R1A];
 
 % these parameters give a full-width half-max of the bolus of ~ Tbolus sec
