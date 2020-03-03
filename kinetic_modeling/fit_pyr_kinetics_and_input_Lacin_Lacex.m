@@ -1,4 +1,4 @@
-function [params_fit, Sfit, ufit, error_metrics] = fit_pyr_kinetics_and_input_Lacin_Lacex(S, TR, flips, params_fixed, params_est, noise_level, plot_flag)
+function [params_fit, Sfit, ufit, error_metrics] = fit_pyr_kinetics_and_input_Lacin_Lacex(S, TR, flips, params_fixed, params_est, noise_level, plot_flag,filename)
 % fit_pyr_kinetics - Kinetic model fitting function for HP 13C MRI.
 %
 % Fits substrate (pyruvate) and product signals, assuming a given input function shape.
@@ -203,7 +203,7 @@ for i=1:size(Sreshape, 1)
         
         if plot_flag
             % plot of fit for debugging
-            figure(99)
+            figure
             subplot(2,1,1)
             plot(t, Mz(1:Nmets,:), t, Mzfit(1:Nmets,:),'--', t, ufit(i,:)./ Sscale(1, :), 'k:')
             xlabel('time (s)')
@@ -227,6 +227,7 @@ for i=1:size(Sreshape, 1)
             products_legend{Nmets*2+1} = 'input estimate';
             legend( products_legend)
             drawnow, pause(0.5)
+            print(gcf,'-dtiff','-r300',strcat(filename,"hptoolbox",".tif"))
         end
     end
 end
