@@ -166,7 +166,7 @@ for i=1:size(Sreshape, 1)
         
         % fit to data
         options = optimset('Display','none','Algorithm','quasi-newton'); % not supported in Octave?
-        lsq_opts = optimset('Display','none','MaxIter', 500, 'MaxFunEvals', 500);
+        lsq_opts = optimset('Display','none','MaxIter', 1000, 'MaxFunEvals', 1e30);
         
         switch(fit_method)
             case 'ls'
