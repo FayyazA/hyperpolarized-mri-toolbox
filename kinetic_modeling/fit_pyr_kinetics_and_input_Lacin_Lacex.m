@@ -64,7 +64,7 @@ params_default_lb = [0.0001, 0.0001, -Inf, ...
     10^7, 20, 40,1E-08,1E-08,0,0];
 params_default_ub = [0.08, 10, Inf, ...
     1/10, 1/10, 1/10, 1/35 , ...
-    max(S(:)) 60 Inf,10,10,0.9,0.1];
+    Inf 60 Inf,10,10,0.9,0.1];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -165,7 +165,7 @@ for i=1:size(Sreshape, 1)
         Istart = 1;
         
         % fit to data
-        options = optimset('Display','none','Algorithm','trust-region-reflective'); % not supported in Octave?
+        options = optimset('Display','none','Algorithm','quasi-newton'); % not supported in Octave?
         lsq_opts = optimset('Display','none','MaxIter', 1000, 'MaxFunEvals', 1e30);
         
         switch(fit_method)
