@@ -64,7 +64,7 @@ params_default_lb = [0.0001, 0.0001, -Inf, ...
     10^7, 20, 40,1E-08,1E-08,0,0];
 params_default_ub = [0.08, 10, Inf, ...
     1/10, 1/10, 1/10, 1/35 , ...
-    Inf 60 Inf,10,10,0.9,0.1];
+    Inf 60 150,10,10,0.9,0.1];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -445,11 +445,11 @@ for It=0:N-1
         
     else
         Mz_init = Mz_all(:,It) .* Mzscale(:, It);
-        u(It+1) = gampdf(t-Tarrival,Agam,Bgam)*-Rinj;
+        u(It+1) = gampdf(t-Tarrival,Agam,Bgam)*Rinj;
     end
     
         
-    xstar = - inv(A)*[u(It+1),0,0,0].';
+    xstar = -inv(A)*[u(It+1),0,0,0].';
     
     % solve next time point under assumption of constant input during TR
     Mz_all(:,It+1) = xstar + expm(A*TR) * (Mz_init - xstar);

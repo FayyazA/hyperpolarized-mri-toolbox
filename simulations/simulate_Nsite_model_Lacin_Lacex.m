@@ -1,4 +1,4 @@
-function [Mxy, Mz] = simulate_Nsite_model(Tin, R1, k, flips, TR, input_function)
+function [Mxy, Mz] = simulate_Nsite_model_Lacin_Lacex(Tin, R1, k, flips, TR, input_function)
 % [Mxy, Mz] = simulate_Nsite_model(Mz0, R1, k, flips, TR, [input_function])
 %
 % Simulates the magnetization evolution in a N-site exchange model with
@@ -43,6 +43,15 @@ else
     Nsim = 100;
 end
 
+R1P = R1(1);
+R1L = R1(2);
+R1Lex = R1(3);
+kPL = k(1,1);
+kLinLex = k(2,1);
+kLinflux = k(3,1);
+kLP = k(1,2);
+FP = k(2,2);
+FL = k(3,2);
 switch Nmets
     case 2
         A = [-R1(1)-k(1,1) +k(1,2)
@@ -52,10 +61,10 @@ switch Nmets
             +k(1,1) -R1(2)-k(1,2) 0
             +k(2,1) 0 -R1(3)-k(2,2)];
     case 4
-        A = [-R1(1)-k(1,1)-k(2,1) +k(1,2) +k(2,2) +k(3,2)
-            +k(1,1) -R1(2)-k(1,2) 0 0
-            +k(2,1) 0 -R1(3)-k(2,2) 0
-            +k(3,1) 0 0 -R1(4)-k(3,2)];
+        A = [-R1P-kPL-FP kLP 0 0
+            kPL -R1L-kLinLex-kLP kLinflux 0
+            0 kLinLex -R1Lex-FL-kLinflux 0
+            0 0 0 0];
 end
 
 Ad_TR = expm(A*TR);
