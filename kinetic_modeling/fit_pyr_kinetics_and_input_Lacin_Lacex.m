@@ -49,6 +49,7 @@ size_S = size(S);  ndimsx = length(size_S)-2;
 Nt = size_S(end); t = [0:Nt-1]*TR;
 Nx = size_S(1:ndimsx);
 Nmets = size_S(end-1);
+value = domax(S)*100;
 if isempty(Nx)
     Nx = 1;
 end
@@ -61,10 +62,10 @@ params_default_est = [0.01, 0.01, 0.01, ...
     10^9, 40, 8,0.15,0.6,0,0];
 params_default_lb = [0.0001, 0.0001, -Inf, ...
     1/50, 1/38, 1/50, 1/40, ...
-    10^7, 20, 40,1E-08,1E-08,0,0];
+    10^4, 20, 40,1E-08,1E-08,0,0];
 params_default_ub = [0.08, 10, Inf, ...
     1/10, 1/10, 1/10, 1/35 , ...
-    Inf 60 150,10,10,0.9,0.1];
+    value 60 150,10,10,0.9,0.1];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
