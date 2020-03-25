@@ -85,12 +85,12 @@ disp('')
 clear params_fixed params_est params_fit params_fitn_complex params_fitn_mag
 clear Sfit Snfit_complex Snfit_mag
 params_fixed.R1P = R1P_est; params_fixed.R1Lex = R1Lex_est;
-params_est.kPL = kPL_est; 
+params_est.kPL = kPL_est; params_est.kLinLex = kLinLex_est;
 params_est.Tarrival = Tarrival_est; params_est.Rinj = Rinj_est; params_est.Tbolus = Tbolus_est;
 
 for Iflips = 1:N_flip_schemes
     % no noise
-    [params_fit(:,Iflips) Sfit(1:2,1:N,  Iflips)] = fit_pyr_kinetics_and_input_Lacin_Lacex(Mxy(1:2,:,Iflips), TR, flips(1:2,:,Iflips), params_fixed, params_est, [], plot_fits, "Test");
+    [params_fit(:,Iflips) Sfit(1:2,1:N,  Iflips)] = fit_pyr_kinetics_and_input_Lacin_Lacex(Mxy(1:3,:,Iflips), TR, flips(1:3,:,Iflips), params_fixed, params_est, [], plot_fits, "Test");
     
     % add noise
     [params_fitn_complex(:,Iflips) Snfit_complex(1:2,1:N,  Iflips)] = fit_function(Sn(1:2,:,Iflips), TR, flips(1:2,:,Iflips), params_fixed, params_est, [], plot_fits);
