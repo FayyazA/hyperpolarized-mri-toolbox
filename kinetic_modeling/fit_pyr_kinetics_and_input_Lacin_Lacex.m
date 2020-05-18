@@ -62,10 +62,10 @@ params_default_est = [0.01, 0.01, 0.01, ...
     10^9, 40, 8,0.15,0.6,0,0];
 params_default_lb = [0.0001, 0.0001, -Inf, ...
     1/51, 1/38, 1/50, 1/37.7, ...
-    10^4, 12, 35,1E-08,1E-08,0,0];
+    10^4, 12, 35,1E-08,1E-08,1E-14,1E-14];
 params_default_ub = [0.08, 10, Inf, ...
     1/47, 1/10, 1/10, 1/35.7 , ...
-    value 60 150,10,10,0.9,0.1];
+    value 60 150,10,10,0.01,0.01];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -204,12 +204,12 @@ for i=1:size(Sreshape, 1)
         
         if plot_flag
             % plot of fit for debugging
-            figure
-            subplot(2,1,1)
-            plot(t, Mz(1:Nmets,:), t, Mzfit(1:Nmets,:),'--', t, ufit(i,:)./ Sscale(1, :), 'k:')
-            xlabel('time (s)')
-            ylabel('state magnetization (au)')
-            subplot(2,1,2)
+            figure('units','normalized','outerposition',[0 0 1 1])
+%             subplot(2,1,1)
+%             plot(t, Mz(1:Nmets,:), t, Mzfit(1:Nmets,:),'--', t, ufit(i,:)./ Sscale(1, :), 'k:')
+%             xlabel('time (s)')
+%             ylabel('state magnetization (au)')
+%             subplot(2,1,2)
             plot(t, Mxy(1:Nmets,:), t, squeeze(Sfit(i,1:Nmets,:)),'--', t, ufit(i,:), 'k:')
             xlabel('time (s)')
             ylabel('signal (au)')
@@ -228,7 +228,7 @@ for i=1:size(Sreshape, 1)
             products_legend{Nmets*2+1} = 'input estimate';
             legend( products_legend)
             drawnow, pause(0.5)
-            print(gcf,'-dtiff','-r300',strcat(filename,"hptoolbox",".tif"))
+            print(gcf,'-dtiff','-r0',strcat(filename,"hptoolbox",".tif"))
         end
     end
 end
@@ -420,7 +420,7 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-FP-kPA, kLP, 0, 0
+A = [-R1P-kPL-FP, kLP, 0, 0
     +kPL, -R1L-kLinLex-kLP, kLinflux, 0
     0, +kLinLex, -R1Lex-FL-kLinflux, 0
     +kPA, 0, 0, -R1A];

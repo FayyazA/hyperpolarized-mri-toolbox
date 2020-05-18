@@ -4,9 +4,9 @@ clear all
 
 % Test values
 Tin = 0; Tacq = 300; TR = 3; N = Tacq/TR;
-R1P = 1/48; R1L = 1/22; R1Lex = 1/36.7; R1A = 1/25;
-kPL = 0.007; kLinLex = 0.65; kLinflux = 0.00;
-FP = 0.1; FL = 0.5; kLP = 0;
+R1P = 1/48; R1L = 1/15; R1Lex = 1/36.7; R1A = 1/25;
+kPL = 0.007; kLinLex = 0.65; kLinflux = 1E-10;
+FP = 0.1; FL = 0.5; kLP = 1E-10;
 Rinj = 1.02*10^9;
 std_noise = 0.005;
 
@@ -84,7 +84,8 @@ disp('')
 
 clear params_fixed params_est params_fit params_fitn_complex params_fitn_mag
 clear Sfit Snfit_complex Snfit_mag
-params_fixed.R1P = R1P_est; params_fixed.R1Lex = R1Lex_est;
+params_fixed = struct;
+%params_fixed.R1P = R1P_est; params_fixed.R1Lex = R1Lex_est;
 params_est.kPL = kPL_est; params_est.kLinLex = kLinLex_est;
 params_est.Tarrival = Tarrival_est; params_est.Rinj = Rinj_est; params_est.Tbolus = Tbolus_est;
 
