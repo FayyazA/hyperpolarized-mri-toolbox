@@ -59,13 +59,13 @@ params_all = {'kPL', 'kLinLex', 'kPA', ...
     'Rinj', 'Tarrival', 'Tbolus','FP','FL','kLinflux','kLP'};
 params_default_est = [0.01, 0.01, 0.01, ...
     1/48, 1/22, 1/25, 1/36.7, ...
-    10^9, 40, 8,0.15,0.6,0,0];
+    10^9, 40, 16*4,0.15,0.6,0,0];
 params_default_lb = [0.0001, 0.0001, -Inf, ...
     1/51, 1/38, 1/50, 1/37.7, ...
-    10^4, 12, 35,1E-08,1E-08,1E-14,1E-14];
+    10^4, 12, 14*4,1E-08,1E-08,1E-14,1E-14];
 params_default_ub = [0.08, 10, Inf, ...
     1/47, 1/10, 1/10, 1/35.7 , ...
-    value 60 150,10,10,0.01,0.01];
+    value 60 18*4,10,10,0.01,0.01];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -425,13 +425,13 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-FP, 0, 0, 0
-    +kPL, -R1L-kLinLex, 0, 0
-    0, +kLinLex, -R1Lex-FL, 0
+A = [-R1P-kPL-FP, kLP, 0, 0
+    +kPL, -R1L-kLinLex-kLP, kLinflux, 0
+    0, +kLinLex, -R1Lex-FL-kLinflux, 0
     +kPA, 0, 0, -R1A];
 
 % these parameters give a full-width half-max of the bolus of ~ Tbolus sec
-Agam = 4;
+Agam = 2.995;
 Bgam = Tbolus/4;
 
 
