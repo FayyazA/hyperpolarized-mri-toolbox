@@ -211,14 +211,18 @@ for i=1:size(Sreshape, 1)
 %             ylabel('state magnetization (au)')
 %             subplot(2,1,2)
             plot(t, Mxy(1:Nmets,:), t, squeeze(Sfit(i,1:Nmets,:)),'--', t, ufit(i,:), 'k:')
-            xlabel('time (s)')
-            ylabel('signal (au)')
+            ax = gca;
+            ax.FontSize = 16;
+            h = xlabel('time (s)');
+            set(h, 'FontSize', 30);
+            h2 = ylabel('signal (au)');
+            set(h2, 'FontSize', 30);
             
             fit_results_string = [];
             for n = 1:Nparams_to_fit
                 fit_results_string = [fit_results_string, param_names{n} ' = ' num2str(params_fit_vec(i,n),2) ' '];
             end            
-            title(fit_results_string)
+            %title(fit_results_string)
             disp(fit_results_string)
             
             for n = 1:Nmets
@@ -226,7 +230,8 @@ for i=1:size(Sreshape, 1)
                 products_legend{n+Nmets} = [products_string{n} ' fit'];
             end    
             products_legend{Nmets*2+1} = 'input estimate';
-            legend( products_legend)
+            my_legend = legend( products_legend);
+            my_legend.FontSize = 14;
             drawnow, pause(0.5)
             print(gcf,'-dtiff','-r0',strcat(filename,"hptoolbox",".tif"))
         end
