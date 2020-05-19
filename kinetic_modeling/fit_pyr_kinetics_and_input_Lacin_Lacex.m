@@ -425,9 +425,9 @@ for n = 1:length(params_all)
     end
 end
 
-A = [-R1P-kPL-FP, kLP, 0, 0
-    +kPL, -R1L-kLinLex-kLP, kLinflux, 0
-    0, +kLinLex, -R1Lex-FL-kLinflux, 0
+A = [-R1P-kPL-FP, 0, 0, 0
+    +kPL, -R1L-kLinLex, 0, 0
+    0, +kLinLex, -R1Lex-FL, 0
     +kPA, 0, 0, -R1A];
 
 % these parameters give a full-width half-max of the bolus of ~ Tbolus sec
