@@ -62,10 +62,10 @@ params_default_est = [0.01, 0.01, 0.01, ...
     10^9, 40, 8,0.15,0.6,0,0];
 params_default_lb = [0.0001, 0.0001, -Inf, ...
     1/51, 1/38, 1/50, 1/37.7, ...
-    10^4, 12, 35,0.01,0.01,1E-14,1E-14];
+    10^4, 12, 35,1E-08,1E-08,1E-14,1E-14];
 params_default_ub = [0.08, 10, Inf, ...
     1/47, 1/10, 1/10, 1/35.7 , ...
-    value 60 150,1,1.5,0.01,0.01];
+    value 60 150,10,10,0.01,0.01];
 
 if nargin < 5 || isempty(params_fixed)
     params_fixed = struct([]);
@@ -210,7 +210,7 @@ for i=1:size(Sreshape, 1)
 %             xlabel('time (s)')
 %             ylabel('state magnetization (au)')
 %             subplot(2,1,2)
-            plot(t, Mxy(1:Nmets,:), t, squeeze(Sfit(i,1:Nmets,:)),'--', t, ufit(i,:), 'k:')
+            plot(t, Mxy(1,:)./10^2, 'b*--', t, Mxy(2,:), 'g*--', t, Mxy(3,:), 'r*--', t, squeeze(Sfit(i,1,:))./10^2,'b-', t, squeeze(Sfit(i,2,:)),'g-', t, squeeze(Sfit(i,3,:)),'r-', t, ufit(i,:)./10^2, 'k-')
             ax = gca;
             ax.FontSize = 16;
             h = xlabel('time (s)');
@@ -228,8 +228,10 @@ for i=1:size(Sreshape, 1)
             for n = 1:Nmets
                 products_legend{n} = products_string{n};
                 products_legend{n+Nmets} = [products_string{n} ' fit'];
-            end    
-            products_legend{Nmets*2+1} = 'input estimate';
+            end
+            products_legend{1} = 'pyruvate/10^2';
+            products_legend{4} = 'pyruvate fit/10^2';
+            products_legend{Nmets*2+1} = 'input estimate/10^2';
             my_legend = legend( products_legend);
             my_legend.FontSize = 14;
             drawnow, pause(0.5)
