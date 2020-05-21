@@ -228,7 +228,7 @@ for i=1:size(Sreshape, 1)
                 products_legend{n+Nmets} = [products_string{n} ' fit'];
             end
             products_legend{1} = 'pyruvate/10^2';
-            products_legend{4} = 'pyruvate fit/10^2';
+            products_legend{3} = 'pyruvate fit/10^2';
             products_legend{Nmets*2+1} = 'input estimate/10^2';
             my_legend = legend( products_legend);
             my_legend.FontSize = 14;
